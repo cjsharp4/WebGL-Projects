@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<title>T W I S T Y !</title>
+
+
+<!-- Vertex Shader -->
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+// This is GLSL code (not HTML5)
+// By: Carson Sharp
+
+attribute vec4 vPosition;
+
+//HW470: one or more uniforms to control twisting and color change
+//uniform 
+uniform float theta;
+uniform float colorChange;
+
+//incoming color attribute and varying for fragment shader
+attribute vec3 vColor;
+varying vec4 color;
+
+void
+main()
+{
+	// HW470: twisty the geometry x,y coords and set z and w
+	// Change the code below.
+	//gl_Position.x = vPosition.x;
+	//gl_Position.y = vPosition.y;
+    //gl_Position.z = 0.0;
+    //gl_Position.w = 1.0;
+
+	float s = sin( ( vPosition.x * vPosition.x + vPosition.y * vPosition.y ) * theta );
+    float c = cos( ( vPosition.x * vPosition.x + vPosition.y * vPosition.y ) * theta );
+
+    gl_Position.x = -s * vPosition.x + c * vPosition.y;
+    gl_Position.y =  s * vPosition.y + c * vPosition.x;
+    gl_Position.z = 0.0;
+    gl_Position.w = 1.0;
+	
+	// common mistake: using integer instead of float
+	// gl_Position.w = 1; 
+	//     -- this would result in an error
+	// common mistake: trying to change a uniform variable here
+	
+	
+	//HW470: Modify color   
+	// colors are between 0 and 1. 
+	// You will need to do linear interpolation
+	// for example interpolate between current red component and 1.0 
+	float red = vColor.r + colorChange;
+	
+	float green = vColor.g + colorChange;
+	
+	float blue = vColor.b + colorChange;
+
+    //set the varying color for the fragment shader 
+    color = vec4(red, green, blue, 1.0);
+}
+</script>
+
+<!-- Fragment Shader -->
+<!-- (no change to this) -->
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+// This is GLSL code (not HTML5)
+
+precision mediump float;
+
+// Color coming in
+varying vec4 color;
+
+
+void
+main()
+{
+   //pass color to fragment shader
+    gl_FragColor = color;
+}
+</script>
+
+<!-- JS Utility codes and codes for this program -->
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="twisty.js"></script>
+</head>   
+
+<body>
+<!--HW470: Add text to communicate what program does -->
+<div style="font-family:verdana";>
+<h1> CSE 470 HW#1: TWISTY!</h1>
+
+<strong>Author: </strong>Carson Sharp
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp        
+<strong>Date: </strong>January 2021</br>
+
+</br>
+<strong>Description: </strong></br>This program draws a cool shape and applies interpolation to fade the shape to the white background
+and tesselation that reverses itself at the end of the animation (Twisty!).
+</br>
+</br>
+<strong>How did you map color from the initial (r,g,b) to white?</strong></br>
+HW470: I made a uniform variable (colorChange) that would slowly increase the original value of the vColor variables to 1 (vColor.r + colorChange) , making each color fade to white!
+</br>
+</br>
+<strong>Resources: </strong>Prof. Angel's codes and https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/getUniformLocation </br>
+</br>
+</div>
+
+<canvas id="gl-canvas" width="512" height="512" style="border:2px solid #000000;">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+
+</body>
+</html>
