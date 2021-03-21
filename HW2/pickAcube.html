@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css">
+    canvas { background: PapayaWhip; }
+</style>
+
+
+<canvas id="gl-canvas" width="300" height="300" style="border:2px solid #000000;">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+
+<div style="font-family:verdana";>
+Click canvas to pick a cube.
+</br>
+<table style "width:50%">
+<tr>
+ <td><button id = "ButtonIdentity">reset center cube</button></td>
+ </tr>
+ <tr>
+
+ 
+ </tr>
+  
+ </table>
+ 
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute  vec4 vPosition;
+attribute  vec4 vColor;
+varying vec4 fColor;
+
+uniform vec3 theta;
+uniform mat4 modelView;
+ 
+
+void main() 
+{
+    gl_PointSize = 10.0;
+	gl_Position = modelView*vPosition;
+    fColor = vColor;
+} 
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+
+varying vec4 fColor;
+
+void
+main()
+{
+    gl_FragColor = fColor;
+}
+</script>
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="CreateCube.js"></script>
+<script type="text/javascript" src="pickAcube.js"></script>
+
+<body>
+
+<div>
+scale cube 10% <input id="slider2" type="range"
+ min=".1" max="1" step=".1" value=".2" />
+ 100%<br>
+</div>
+
+<div>
+rotation speed 10% <input id="slider" type="range"
+ min=".1" max="1" step=".1" value=".2" />
+ 100%<br>
+
+</div>
+
+<body>
+<!--HW470: Add text to communicate what program does -->
+<div style="font-family:verdana";>
+<h1> CSE 470 HW#2: Pick a Cube</h1>
+
+<strong>Author: </strong>Carson Sharp
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp        
+<strong>Date: </strong>March 2021</br>
+
+</br>
+<strong>Description: </strong></br>This program makes a cube and displays 8 copies that rotate on their own axes, aligned in a circle around a center cube. 
+Selecting any outer cube will make the center cube copy that cube. Cube functionality is done by: translating the prototype cube to the origin, scaling and rotating at the origin, and then translating to the correct spot on the outer circle.
+</br>
+</br>
+<strong>Resources: </strong>Prof. Angel's codes (especially MV.js). </br>
+</br>
+</div>
+
+
+</body>
+</html>
